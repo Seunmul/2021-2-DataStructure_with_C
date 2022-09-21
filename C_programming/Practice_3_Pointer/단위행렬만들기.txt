@@ -1,0 +1,45 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+   //단위행렬만들기.
+   int num;
+
+   scanf("%d", &num);
+   int** ptr = malloc(sizeof(int*) * num);
+
+   for (int i = 0; i < num; i++)
+   {
+       ptr[i] = malloc(sizeof(int) * num);
+       memset(ptr[i], 0, sizeof(int) * num);
+   }
+
+   for (int i = 0; i < num; i++)
+   {
+       
+           ptr[i][i] = 1;
+       
+   }
+   //printf("\n\n");
+
+   for (int i = 0; i < num; i++)
+   {
+       for (int j = 0; j < num; j++)
+       {
+           printf("%d ", ptr[i][j]);
+       }
+       printf("\n");
+   }
+
+   for (int i = 0; i < num; i++)    // 세로 크기만큼 반복
+   {
+       free(ptr[i]);                  // 2차원 배열의 가로 공간 메모리 해제
+   }
+
+   free(ptr);    // 2차원 배열의 세로 공간 메모리 해제
+
+    return 0;
+}

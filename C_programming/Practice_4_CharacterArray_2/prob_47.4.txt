@@ -1,0 +1,66 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+int main()
+{
+   char text[31];
+   //char* sArr[31] = { NULL, };
+   
+    scanf("%[^\n]s", text);
+
+   /* char* ptr = strtok(text, " ");
+
+    int i = 0;
+    while (ptr != NULL)
+    {
+        sArr[i] = ptr;
+        i++;
+
+        //printf("%s\n", ptr);
+        ptr = strtok(NULL, " ");
+    }
+
+    char chk[31]="";
+    for (int i = 0; i < 10; i++)
+    {
+        if (sArr[i] != NULL)           // 문자열 포인터 배열의 요소가 NULL이 아닐 때만
+            strcat(chk,sArr[i]);   // 문자열 포인터 배열에 인덱스로 접근하여 각 문자열 출력
+    }
+    strcpy(text, chk);
+    */
+    int length;
+    bool isPalindrome = true;
+
+    length = strlen(text);
+
+    int begin = 0;
+    int end = length - 1;
+    while (begin < end)
+    {
+        if (text[begin]==' ')
+        {
+            begin++;
+            continue;
+        }
+        if (text[end] == ' ')
+        {
+            end--;
+            continue;
+        }
+        if (text[begin] != text[end])
+        {
+            isPalindrome = false;
+            break;
+        }
+        begin++;
+        end--;
+    }
+
+    printf("%d\n", isPalindrome);
+
+    return 0;
+    return 0;
+}

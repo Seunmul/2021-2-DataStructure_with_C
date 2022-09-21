@@ -1,0 +1,219 @@
+#define _CRT_SECURE_NO_WARNINGS
+//#include "Stack_Array.h"
+#include "Stack_List.h"
+#include <string.h>
+
+enum _parenthesis
+{
+    left_pth = '(',
+    right_pth = ')'
+}parenthesis;
+
+enum _operator {
+    plus = '+',
+    minus = '-',
+    multi = '*',
+    remainder = '%',
+}operator;
+
+char* strcpy_Exception(char* s1, char* s2) {
+    if (s1) {
+        return strcpy(s1, s2);
+    }
+    else {
+        printf("memory error !");
+        return NULL;
+    }
+}
+
+int EraseBlank(char* cal)
+{
+    char ptr[30] = { 0, };
+    int i = 0;
+    int j = 0;
+    int count = 0;
+    while (cal[i] != '\0')
+    {
+        if (cal[i] != ' ')
+        {
+            //printf("%c", cal[i]);
+            ptr[j] = cal[i];
+            j++;
+        }
+        else
+        {
+            count++;
+        }
+        i++;
+    }
+    strcpy(cal, ptr);
+
+    return count;
+}
+
+bool IsOperator(char op)
+{
+    switch (op)
+    {
+    case plus:
+    case minus:
+    case multi:
+    case remainder:
+    {
+        return true;
+        break;
+    }
+    default:
+    {
+        return false;
+        break;
+    }
+    }
+}
+
+bool pthVaild(char* cal)
+{
+    bool result = true;
+    int i = 0;
+    char* pth_Chk = (char*)malloc(sizeof(char) * (strlen(cal) + 1)); // 문자열 복사를 위한 메모리 동적할당 // 사이즈는 cal의 문자열 사이즈 +1 만큼 동적할당(\0 고려)
+    if (pth_Chk != NULL)
+    {
+        memset(pth_Chk, 0, sizeof(char) * (strlen(cal) + 1));
+    }
+    pth_Chk = strcpy_Exception(pth_Chk, cal);
+
+    Stack* pth_Chk_Stack = CreateStack(strlen(pth_Chk));
+    while (pth_Chk[i] != '\0')
+    {
+        if (pth_Chk[i] == (char)left_pth)
+        {
+            Push(pth_Chk_Stack, (Element)pth_Chk[i]);
+        }
+        else if (pth_Chk[i] == (char)right_pth)
+        {
+            result = Pop(pth_Chk_Stack) ? true : false;
+        }
+        i++;
+    }
+    result = result && (IsEmptyStack(pth_Chk_Stack) ? true : false);
+    DestroyStack(pth_Chk_Stack);
+    pth_Chk_Stack = NULL;
+    free(pth_Chk);
+    return result;
+}
+
+bool expVaild(char* cal)
+{
+    bool result = true;
+    int i = 0;
+    int j = 0;
+    char* exp_Chk = (char*)malloc(sizeof(char) * (strlen(cal) + 1)); // 문자열 복사를 위한 메모리 동적할당 // 사이즈는 cal의 문자열 사이즈 +1 만큼 동적할당(\0 고려)
+    Stack* exp_Chk_Stack;
+    exp_Chk = strcpy_Exception(exp_Chk, cal);
+
+    //operand tokenize              
+    char* tok = NULL;
+    char* operand_tok[50] = { 0, };
+
+    int cnt = 0;
+    tok = strtok(exp_Chk, " +-*%()");
+    //printf("%s\n", tok);
+    operand_tok[cnt] = tok;
+    while (tok != NULL)
+    {
+        cnt++;
+        tok = strtok(NULL, " +-*%()");
+
+        if (tok == NULL)
+            continue;
+        //printf("%s\n", tok);
+        operand_tok[cnt] = tok;
+    }
+    //finish
+    //printf("operand수는 %d개\n", cnt);
+
+    //exp_Chk=strcpy_Exception(exp_Chk, cal);
+    exp_Chk_Stack = CreateStack(strlen(cal));
+    if (IsOperator(cal[i]))
+    {
+        return false;
+    }
+    Push(exp_Chk_Stack, (Element)operand_tok[j]);
+
+    if (operand_tok[j])
+    {
+        i = i + strlen(operand_tok[j]);
+    }
+    else { printf("memory error!"); }
+    j++;
+
+    while (cal[i] != '\0')
+    {
+        if (!(IsOperator(cal[i])))
+        {
+            return false;
+        }
+        Push(exp_Chk_Stack, (Element)cal[i]);
+        i++;
+
+        if (IsOperator(cal[i]))
+        {
+            return false;
+        }
+        Push(exp_Chk_Stack, (Element)operand_tok[j]);
+        i = i + strlen(operand_tok[j]);
+        j++;
+    }
+
+    DestroyStack(exp_Chk_Stack);
+    exp_Chk_Stack = NULL;
+    exp_Chk = strcpy_Exception(exp_Chk, cal);
+    free(exp_Chk);
+    return result;
+}
+
+void Calculator()
+{
+    int max_size = 1000;
+    Stack* pStack = CreateStack(max_size); // 계산결과 Stack메모리 할당
+
+    char* cal = (char*)malloc(sizeof(char) * 1000);
+    int calchk = 0;
+    printf("Arithmetic Expression : ");
+    calchk = scanf("%[^\n]s", cal);
+    //printf("%s\n", cal);
+    if (calchk != 1)
+    {
+        printf("입력오류");
+        return;
+    }
+
+    if (!pthVaild(cal))
+    {
+        printf("Check the pairs of Parenthesis!\n");
+        return;
+    }
+    //printf("pthVaild 결과 : %d입니다.\n",pthVaild(cal));
+
+    //
+    if (!expVaild(cal))
+    {
+        printf("Check the binary expression!\n");
+        return;
+    }
+
+    //
+    EraseBlank(cal);
+    printf("Current Expression : %s\n", cal);
+
+    DestroyStack(pStack);// 계산결과 Stack메모리 제거
+    pStack = NULL;
+
+    free(cal);
+
+    return;
+}
+
+//9/20 18:24 infix notation -> postfix로 변환하는 것 해야하고, 괄호 개수 체크하는 건 구현했는데 binary expression 등 계산이 안되는 기타 오류들을 구현하지 못함.
+//우선은 infix notation -> postfix로 변환하면서 계산기 기능을 하도록 구현하는 게 먼저고,
+//여기서 괄호 기능까지 다 작성한 다음에 계산 오류식 다시 작성해야할 듯. 여기서 일단 마무리

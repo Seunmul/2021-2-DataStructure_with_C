@@ -1,0 +1,33 @@
+//이중 포인터 구현 중 에러 발생으로 다시 해야할듯. 21.09.22 23:41 ->parsing함수부터 구현하고 다시 할 것. 오늘 밤 새보자...
+/*
+char** malloc_2div_string(int size_row,int size_column) {
+    char** ptr = (char**)malloc(sizeof(char*) *size_row);
+    ptr ? memset(ptr, 0, sizeof(char*) * size_row) : NULL;
+    for (int i = 0; i < size_row; i++)
+    {
+        if (ptr)
+        {
+           ptr[i] = (char*)malloc(sizeof(char) * size_column);
+            if (ptr[i])
+            {
+                memset(ptr[i], 0, sizeof(char) * size_column);
+            }
+            for (int j = 0; j < size_column; j++)
+            {
+                ptr[i][j] = (char)malloc(sizeof(char));
+                ptr[i][j] = NULL;
+            }
+        }
+        
+    }
+    
+    return ptr;
+}
+void free_2div_string(void** ptr,int size_column,int size_row)
+{
+    for (int i = 0; i < size_column; i++)
+    {
+        free(ptr[i]=(char*)malloc(ptr[i],sizeof(char) * size_row));
+    }
+    free(ptr);
+}*/

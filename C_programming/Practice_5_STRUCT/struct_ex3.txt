@@ -1,0 +1,35 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> // memset memcpy
+#include <stddef.h>
+
+
+
+// 구조체 선언
+// 선언과 동시에 초기화
+// typedef를 이용한 재정의
+// 익명 구조체
+
+struct Point2D {
+    int x;
+    int y;
+};
+
+int main()
+{
+    struct Point2D p;
+    struct Point2D* p1 = malloc(sizeof(struct Point2D));
+
+    memset(&p,0, sizeof(struct Point2D));
+    printf("%d %d\n", p.x, p.y);
+
+    memset(p1, 1, sizeof (struct Point2D));
+
+    printf("%d %d\n", p1->x, p1->y);    // 0 0: memset을 사용하여 0으로 설정했으므로
+                                      // x, y 모두 0
+
+    free(p1);    // 동적 메모리 해제
+
+    return 0;
+}

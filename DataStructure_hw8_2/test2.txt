@@ -1,0 +1,9 @@
+A
+A B
+A C
+B D
+B E
+C E
+G F
+D G
+E G

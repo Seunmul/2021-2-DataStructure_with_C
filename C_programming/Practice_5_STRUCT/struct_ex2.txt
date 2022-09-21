@@ -1,0 +1,34 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+
+
+
+// 구조체 선언
+// 선언과 동시에 초기화
+// typedef를 이용한 재정의
+// 익명 구조체
+
+struct PacketHeader {
+    char flags;    // 1바이트
+    int seq;       // 4바이트
+};
+
+int main()
+{
+    struct PacketHeader header;
+
+    printf("%d\n", sizeof(header.flags));           // 1: char는 1바이트
+    printf("%d\n", sizeof(header.seq));             // 4: int는 4바이트
+    printf("%d\n", sizeof(header));                 // 8: 구조체 전체 크기는 8바이트
+    printf("%d\n", sizeof(struct PacketHeader));    // 8: 구조체 이름으로 크기 구하기
+
+    //offsetof(struct 구조체, 멤버)
+    //offsetof(구조체별칭, 멤버)
+    printf("%d\n", offsetof(struct PacketHeader, flags));    // 0
+    printf("%d\n", offsetof(struct PacketHeader, seq));      // 4
+
+    return 0;
+}

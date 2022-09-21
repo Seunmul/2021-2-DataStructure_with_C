@@ -1,0 +1,72 @@
+int main()
+{
+       
+    int max_size = 1000;
+    Stack* pStack = CreateStack(max_size);   // 계산결과 Stack메모리 할당
+    
+   //
+    char* cal_input= (char*)malloc(sizeof(char) * 1000); //수식 입력받을 문자열.
+    char* blankErased_input = (char*)malloc(sizeof(char) * 1000); //공백제거 수식 입력받을 문자열.
+   char* integerToken_input[64] = { 0 ,};
+
+    int chk_input = 0;
+   int t_size = 0, index = 0, tok_index=0, op1 = 0, op2 = 0;
+
+    cal_input ? memset(cal_input, 0, sizeof(char) * 1000) : NULL;
+    blankErased_input ? memset(blankErased_input, 0, sizeof(char) * 1000) : NULL;
+
+    printf("Arithmetic Expression : ");
+    chk_input = scanf("%[^\n]s", cal_input); //공백포함 수식 입력 받기
+    if (chk_input != 1)    {
+        printf("입력오류");
+        return;    }
+    else { printf("입력확인 : %s\n", cal_input); } //입력 확인
+    Postfix_cal(cal_input);
+    //공백제거
+    
+    if (blankErased_input && cal_input ) { blankErased_input = strcpy(blankErased_input, cal_input); }
+    else { return 0; }
+    printf("공백개수 : %d개\n", EraseBlank(blankErased_input));
+    printf("공백제거 : %s\n", blankErased_input);
+    printf("\n");
+
+    //숫자만 저장할 문자열 token   
+    t_size = parsing(cal_input, integerToken_input,64, " +-*%");
+    /*while (integerToken_input[index] != NULL)
+    {
+        printf("data[%d]:%s\n", index+1,integerToken_input[index]);
+        index++;
+    }*/
+    
+    index = 0;
+    while (blankErased_input[index] != (int)NULL )
+    {
+        if (IsOperand(blankErased_input[index] ))
+        {
+            Push(pStack, (integerToken_input[tok_index] ? atoi(integerToken_input[tok_index]) :  0));
+            index = index + (int)(integerToken_input[tok_index] ? strlen(integerToken_input[tok_index]) : 0);
+            tok_index++;
+        }
+        else {
+            op2 = Pop(pStack); op1 = Pop(pStack);
+            switch (blankErased_input[index])
+            {
+            case plus : Push(pStack, (op1 + op2)); break;
+            case minus : Push(pStack, (op1 - op2)); break;
+            case multi : Push(pStack, (op1 * op2)); break;
+            case remainder : Push(pStack, (op1 % op2)); break;
+            default: printf("error\n"); return 0;
+            }
+            index++;
+        }
+    }
+    printf("계산결과 : %d\n", Pop(pStack));
+    DestroyStack(pStack);// 계산결과 Stack메모리 제거
+    pStack = NULL;
+    //
+
+    free(blankErased_input);
+    free(cal_input);
+    
+    return 0;
+}

@@ -1,0 +1,89 @@
+#include <stdio.h>
+
+// 이름(영어, 이름  성 순), 나이, 성별을 입력 받아 이를 출력하는 프로그램
+// 단 이름의 출력은 성 이름의 순서가 되도록 해야함.
+
+
+
+int main(void)
+{
+	
+	struct {
+		char name[50];
+		int age;
+		char sex;
+		char* namep;
+
+	} student;
+	
+	//programming going on
+	
+	
+	for(;;)
+	{
+		printf("Provide your personal information : \n");
+		printf("▷ Name : ");
+		fgets(student.name, sizeof(student.name), stdin);
+		student.name[strlen(student.name) - 1] = '\0';
+		student.namep = &student.name;
+
+		char chk[4]="";
+		for (int a = 0; a<4; a++)
+		{
+			chk[a] = student.name[a];
+			//printf("%c", chk[a]);
+		}
+		if ((chk[0] == 's')&&(chk[1] == 't')&&(chk[2] == 'o') && (chk[3] == 'p')){ break; }
+
+		printf("▷ Age : ");
+		scanf(" %d", &student.age);
+		getchar();
+
+		printf("▷ Sex(M/F) : ");
+		scanf(" %c", &student.sex);
+		getchar();
+
+		//여기까지 값 입력 및 stop 입력시 off
+
+
+		int index, size, first_len;
+		int i;
+		char out_lastname[50] = "";
+		char out_firstname[50] = "";
+		char* out_lastnamep = &out_lastname;
+		char* out_firstnamep = &out_firstname;
+
+		size = strlen(student.namep);
+
+		for (index = 0; *(student.namep + index) != ' '; index++)
+		{	out_firstnamep[index] = student.namep[index]; 	}
+		out_firstnamep[index] = "\0";
+
+		first_len = index;
+		index = index + 1;
+
+		for (index; index < size; index++)
+		{ out_lastnamep[index - first_len - 1] = student.namep[index];	}
+		out_lastnamep[index - first_len-1] = "\0";
+		// 출력을 위해 성 입력값과 이름 입력값을 각각의 배열에 저장
+
+		printf("\n\n\n");
+		printf("Your name is ");
+
+		for (i = 0; i < out_lastname[i]; i++) // 반복문을 이용해 성 출력
+		{	printf("%c", out_lastname[i]); }
+
+		printf(" ");
+
+		for (i = 0; i < out_firstname[i]; i++) // 반복문을 이용해 이름 출력
+		{ printf("%c", out_firstname[i]); }
+
+		printf(", ");
+	
+
+		printf("your age is %d, your sex is %c \n\n", student.age, student.sex);
+		printf("\n\n");
+	}
+	
+	return 0;
+}
